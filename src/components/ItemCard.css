@@ -1,0 +1,13 @@
+.movie-card-fav-btn {
+    margin-top: 0.5rem;
+    padding: 0.3rem 0.6rem;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    background: #f9f9f9;
+    cursor: pointer;
+    font-size: 0.8rem;
+}
+
+.movie-card-fav-btn:hover {
+    background: #eee;
+}
