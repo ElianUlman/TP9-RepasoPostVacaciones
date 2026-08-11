@@ -1,121 +1,72 @@
 import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import heroImg from './assets/hero.png'
 import './App.css'
+import Searchbar from "./components/Searchbar.jsx"
+import { simpleMovie, movieDetail, filterSeacrh } from './services/axios.js'
+import ItemCard from './components/ItemCard.jsx'
+import PopUpDetalle from './components/PopUpDetalle.jsx'
 
 function App() {
-  const [count, setCount] = useState(0)
+  const theme = "light";
+  const toggleTheme = () => {};
+  const [movies, setMovies] = useState([])
+  const [movie, setMovie] = useState()
+
+  const handleSearch = async (busqueda, filter = null) => {
+    let res
+    setMovie()
+
+    try {
+      if (filter) {
+        res = await filterSeacrh(busqueda, filter)
+      } else {
+        res = await simpleMovie(busqueda)
+      }
+    } catch (error) {
+      console.error(error)
+      setMovies([])
+      return
+    }
+
+    let history
+
+    if (sessionStorage.getItem('history')) {
+      history = JSON.parse(sessionStorage.getItem('history'))
+    } else {
+      history = []
+    }
+    history.push({ name: busqueda })
+
+    sessionStorage.setItem('history', JSON.stringify(history))
+
+    setMovies(res.Search)
+  }
+
+  const mostrarPelicula = async (id) => {
+    try {
+      const res = await movieDetail(id)
+      setMovie(res)
+      setMovies([])
+    } catch (error) {
+      console.error(error)
+    }
+  }
+
+  const home = () => {
+    setMovie(null);
+    setMovies([]);
+    sessionStorage.removeItem('history');
+  };
 
   return (
-    <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Get started</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
-
-      <div className="ticks"></div>
-
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
-
-      <div className="ticks"></div>
-      <section id="spacer"></section>
-    </>
+    <div className={theme} style={{ minHeight: "100vh" }}>
+      <Searchbar handleSearch={handleSearch} home={home} toggleTheme={toggleTheme} />
+      <div className="movie-grid">
+        {movies && movies.map((pelicula) => (
+          <ItemCard key={pelicula.imdbID} pelicula={pelicula} mostrarPelicula={mostrarPelicula} />
+        ))}
+      </div>
+      {movie && <PopUpDetalle movie={movie} />}
+    </div>
   )
 }
 
