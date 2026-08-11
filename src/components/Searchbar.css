@@ -1,0 +1,120 @@
+.search-bar-section {
+    max-width: 700px;
+    margin: 0 auto 1.5rem;
+    padding: 0 1rem;
+}
+
+.search-bar-container {
+    display: flex;
+    justify-content: center;
+}
+
+.search-form {
+    position: relative;
+    display: flex;
+    gap: 0.5rem;
+    width: 100%;
+}
+
+.search-input {
+    flex: 1;
+    padding: 0.7rem 1rem;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    color: var(--color-text);
+    font-size: 0.95rem;
+}
+
+.search-input::placeholder {
+    color: var(--color-text-muted);
+}
+
+.search-input:focus {
+    border-color: var(--color-accent);
+}
+
+.filter-button,
+.submit-button,
+.clear-button {
+    padding: 0.7rem 1rem;
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    background-color: var(--color-surface);
+    color: var(--color-text);
+    cursor: pointer;
+    font-size: 0.95rem;
+    transition: background-color 0.15s ease, border-color 0.15s ease;
+    white-space: nowrap;
+}
+
+.filter-button:hover,
+.submit-button:hover,
+.clear-button:hover {
+    border-color: var(--color-accent);
+}
+
+.submit-button {
+    background-color: var(--color-accent);
+    color: #1a1a1a;
+    border-color: var(--color-accent);
+    font-weight: 600;
+}
+
+.submit-button:hover {
+    background-color: var(--color-accent-hover);
+}
+
+.popup-estilo {
+    position: absolute;
+    top: calc(100% + 0.5rem);
+    left: 0;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    background-color: var(--color-bg-elevated);
+    border: 1px solid var(--color-border);
+    border-radius: 8px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35);
+}
+
+.popup-estilo p {
+    margin: 0;
+    font-size: 0.85rem;
+    color: var(--color-text);
+}
+
+.history-section {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0.75rem 0 0;
+}
+
+.history-item {
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    color: var(--color-text-muted);
+    padding: 0.25rem 0.7rem;
+    border-radius: 999px;
+    font-size: 0.78rem;
+}
+
+.theme-toggle {
+    display: block;
+    margin: 1rem auto 0;
+    padding: 0.4rem 0.9rem;
+    background: none;
+    border: 1px solid var(--color-border);
+    border-radius: 999px;
+    color: var(--color-text-muted);
+    cursor: pointer;
+    font-size: 0.8rem;
+}
+
+.theme-toggle:hover {
+    color: var(--color-text);
+    border-color: var(--color-accent);
+}

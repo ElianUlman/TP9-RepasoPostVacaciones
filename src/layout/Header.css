@@ -1,15 +1,24 @@
 .app-header {
     text-align: center;
-    padding: 1.5rem 1rem 1rem;
+    padding: 2.5rem 1rem 1.5rem;
+    background: linear-gradient(180deg, var(--color-bg-elevated) 0%, var(--color-bg) 100%);
+    border-bottom: 1px solid var(--color-border);
 }
 
 .app-header-title {
-    font-size: 1.8rem;
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(1.8rem, 4vw, 2.6rem);
     margin: 0;
+    color: var(--color-text);
+    letter-spacing: 0.01em;
 }
 
 .app-header-subtitle {
+    font-family: var(--font-body);
     font-size: 0.9rem;
-    opacity: 0.7;
-    margin-top: 0.3rem;
+    color: var(--color-text-muted);
+    margin-top: 0.4rem;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
 }

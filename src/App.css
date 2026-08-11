@@ -1,22 +1,39 @@
 .status-message {
     text-align: center;
-    padding: 2rem;
-    font-size: 1.1rem;
-    opacity: 0.8;
+    padding: 3rem 1rem;
+    font-size: 1.05rem;
+    color: var(--color-text-muted);
 }
 
 .error-message {
-    color: #d33;
-    opacity: 1;
+    color: var(--color-error);
 }
 
-.favorites-section {
-    margin-top: 2rem;
-    border-top: 2px solid #eee;
-    padding-top: 1rem;
+.app-nav {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    padding: 0 0 2rem;
+    border-bottom: 1px solid var(--color-border);
+    margin: 0 auto 1.5rem;
+    max-width: 960px;
 }
 
-.favorites-title {
-    text-align: center;
-    margin-bottom: 1rem;
+.app-nav a {
+    text-decoration: none;
+    color: var(--color-text-muted);
+    font-weight: 500;
+    font-size: 0.95rem;
+    padding: 0.5rem 1rem;
+    border-radius: 6px;
+    transition: color 0.15s ease, background-color 0.15s ease;
+}
+
+.app-nav a:hover {
+    color: var(--color-text);
+    background-color: var(--color-surface);
+}
+
+.app-nav a.active {
+    color: var(--color-accent);
 }
