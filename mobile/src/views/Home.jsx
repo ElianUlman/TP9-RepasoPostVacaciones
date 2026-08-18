@@ -2,35 +2,32 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, View, FlatList, ActivityIndicator, Pressable, Image, TextInput, Text } from 'react-native';
 import { simpleMovie } from '../services/api.js'
 import React, { useState, useEffect } from 'react';
+import { useNavigation } from '@react-navigation/native';
 
 
 
-
-export default function App() {
+export default function Home() {
 
     const [posters, setPosters] = useState([]);
-
     const [loading, setLoading] = useState(true);
-    
-    const [searchQuery, setSearchQuery] = useState("batman")  
+    const [searchQuery, setSearchQuery] = useState("batman")
+
+    const navigation = useNavigation();
 
     useEffect(() => {
         const cargarPoster = async () => {
             setLoading(true)
             try {
                 const data = await simpleMovie(searchQuery);
-                console.log("eesgrg")
-                console.log(data)
+
                 if (data && data.Search) {
                     setPosters(data.Search);
                 } else {
                     setPosters([]);
                 }
-                console.log("posyers")
-                console.log(posters)
             } catch (e) {
                 console.log('No se pudieron cargar las imágenes');
-                console.log(e)
+
             } finally {
                 setLoading(false);
             }
@@ -45,6 +42,7 @@ export default function App() {
                 onChangeText={setSearchQuery}
                 value={searchQuery}
             />
+
             <FlatList
                 data={posters}
                 keyExtractor={(item) => item.imdbID.toString()}
@@ -53,17 +51,22 @@ export default function App() {
                 /**ListHeaderComponent={<BarraEstados userList={images} />} */
                 renderItem={({ item }) => (
                     <Pressable
-                        onPress={() => { console.log("pressed!") } /**navigation.getParent()?.navigate("PostScreen", { post: item }) */}
+                        onPress={() => { navigation.navigate('MovieDetail', { movieId: item.imdbID}) } }
                     >
                         <View style={styles.card}>
 
                             {loading ?
                                 <Text>loading</Text>
                                 :
-                                <Image
-                                    source={{ uri: item.Poster !== "N/A" ? item.Poster : require('../../assets/favicon.png') }}
-                                    style={styles.imagen}
-                                />
+
+                                <View>
+                                    <Image
+                                        source={{ uri: item.Poster }}
+                                        style={styles.imagen}
+                                    />
+                                    <Text>{item.Title}</Text>
+                                </View>
+
                             }
                         </View>
                     </Pressable>
@@ -78,6 +81,6 @@ const styles = StyleSheet.create({
     center: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#000' },
     list: { paddingBottom: 12 },
     card: { marginBottom: 12 },
-    imagen: { width: 150, height: 150 },
-    input: {marginTop: "10%"},
+    imagen: { width: 150, height: 200 },
+    input: { marginTop: "10%" },
 });
