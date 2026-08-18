@@ -1,13 +1,25 @@
 .movie-card-fav-btn {
     margin-top: 0.5rem;
-    padding: 0.3rem 0.6rem;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    background: #f9f9f9;
+    padding: 0.2rem;
+    border: none;
+    background: transparent;
     cursor: pointer;
-    font-size: 0.8rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s ease;
 }
 
 .movie-card-fav-btn:hover {
-    background: #eee;
+    transform: scale(1.2);
+    background: transparent;
+}
+
+.star-icon {
+    font-size: 1.5rem;
+    color: var(--color-text);
+}
+
+.star-icon.active {
+    color: #ffd700; 
 }

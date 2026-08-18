@@ -8,7 +8,7 @@ function PopUpDetalle({ movie }) {
 
       <div className="movie-detail-info">
         <h1 className="movie-detail-title">{movie.Title}</h1>
-        <p className="movie-detail-rating">⭐ {movie.imdbRating}</p>
+        <p className="movie-detail-rating">{movie.imdbRating}</p>
         <div className="movie-detail-meta">
           {movie.Genre?.split(",").map((g) => (
             <span className="movie-detail-tag" key={g}>{g.trim()}</span>

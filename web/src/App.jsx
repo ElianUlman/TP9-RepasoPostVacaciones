@@ -6,8 +6,17 @@ import Home from "./pages/Home.jsx"
 import Favorites from "./pages/Favorites.jsx"
 
 function App() {
-  const theme = "light";
-  const toggleTheme = () => {};
+  const [theme, setTheme] = useState(() => {
+    return localStorage.getItem('theme') || 'dark'
+  })
+
+  useEffect(() => {
+    localStorage.setItem('theme', theme)
+  }, [theme])
+
+  const toggleTheme = () => {
+    setTheme((prevTheme) => (prevTheme === 'dark' ? 'light' : 'dark'))
+  }
 
   const [favoritos, setFavoritos] = useState(() => {
     const stored = localStorage.getItem('favoritos')
@@ -32,7 +41,7 @@ function App() {
 
   return (
     <BrowserRouter>
-      <div className={theme} style={{ minHeight: "100vh" }}>
+      <div className={theme} style={{ minHeight: "100vh", backgroundColor: "var(--color-bg)", color: "var(--color-text)" }}>
         <Header />
         <nav className="app-nav">
           <Link to="/">Inicio</Link>
