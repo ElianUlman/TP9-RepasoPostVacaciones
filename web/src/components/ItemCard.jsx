@@ -1,3 +1,4 @@
+import { FaStar, FaRegStar } from 'react-icons/fa'
 import "./ItemCard.css"
 
 function ItemCard({ pelicula, mostrarPelicula, toggleFavorito, esFavorito }) {
@@ -19,8 +20,16 @@ function ItemCard({ pelicula, mostrarPelicula, toggleFavorito, esFavorito }) {
             <p className="movie-card-title">{pelicula.Title}</p>
             <p className="movie-card-year">{pelicula.Year}</p>
             <p className="movie-card-type">{pelicula.Type}</p>
-            <button className="movie-card-fav-btn" onClick={handleFavClick}>
-                {favorito ? "★ Quitar de favoritos" : "☆ Agregar a favoritos"}
+            <button 
+                className="movie-card-fav-btn" 
+                onClick={handleFavClick}
+                aria-label={favorito ? "Quitar de favoritos" : "Agregar a favoritos"}
+            >
+                {favorito ? (
+                    <FaStar className="star-icon active" />
+                ) : (
+                    <FaRegStar className="star-icon" />
+                )}
             </button>
         </section>
     )

@@ -11,13 +11,15 @@ function Home({ toggleFavorito, esFavorito, toggleTheme }) {
   const [error, setError] = useState(null)
   const [buscado, setBuscado] = useState(false)
 
+  const BUSQUEDA_BASE = "avengers"
+
   useEffect(() => {
-    handleSearch("batman", null, false)
+    handleSearch(BUSQUEDA_BASE, null, false)
   }, [])
 
   const handleSearch = async (busqueda, filter = null, guardarHistorial = true) => {
     let res
-    setMovie()
+    setMovie(null)
     setError(null)
     setLoading(true)
     setBuscado(true)
@@ -28,7 +30,7 @@ function Home({ toggleFavorito, esFavorito, toggleTheme }) {
       } else {
         res = await simpleMovie(busqueda)
       }
-      setMovies(res.Search)
+      setMovies(res.Search || [])
     } catch (err) {
       setError("No fue posible obtener la información.")
       setMovies([])
@@ -37,13 +39,9 @@ function Home({ toggleFavorito, esFavorito, toggleTheme }) {
     }
 
     if (guardarHistorial) {
-      let history
-
-      if (sessionStorage.getItem('history')) {
-        history = JSON.parse(sessionStorage.getItem('history'))
-      } else {
-        history = []
-      }
+      let history = sessionStorage.getItem('history')
+        ? JSON.parse(sessionStorage.getItem('history'))
+        : []
       history.push({ name: busqueda })
 
       sessionStorage.setItem('history', JSON.stringify(history))
@@ -66,10 +64,8 @@ function Home({ toggleFavorito, esFavorito, toggleTheme }) {
 
   const home = () => {
     setMovie(null);
-    setMovies([]);
-    setError(null);
-    setBuscado(false);
     sessionStorage.removeItem('history');
+    handleSearch(BUSQUEDA_BASE, null, false);
   };
 
   return (
