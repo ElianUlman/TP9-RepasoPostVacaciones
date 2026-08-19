@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import React, { useState, useEffect } from 'react';
@@ -12,7 +12,10 @@ export default function FavoriteBtn({ movie }) {
 
     const saveData = async (dataToSave) => {
         try {
-            await AsyncStorage.setItem('@favoritos', JSON.stringify(dataToSave));
+            const cleaned = Array.isArray(dataToSave)
+                ? dataToSave.filter(item => item && item.imdbID && item.Title && item.Poster && item.Poster !== 'N/A')
+                : [];
+            await AsyncStorage.setItem('@favoritos', JSON.stringify(cleaned));
         } catch (e) {
             console.log(e)
         }
@@ -37,11 +40,12 @@ export default function FavoriteBtn({ movie }) {
 
         const onLoad = async () => {
             const values = await getData();
+            const cleaned = Array.isArray(values) ? values.filter(item => item && item.imdbID && item.Title && item.Poster && item.Poster !== 'N/A') : [];
             const existsInArray = values.some(item => item.imdbID == movie.imdbID)
             if (existsInArray) {
                 setIsPressed(true)
             }
-            setFavoritos(values);
+            setFavoritos(cleaned);
         }
         onLoad();
 
@@ -68,29 +72,30 @@ export default function FavoriteBtn({ movie }) {
 
     return (
         <View style={styles.container}>
-            {isPressed ?
-                <Button
-                    title="Des-favoritear"
-                    color="#828415"
-                    onPress={() => onBtnPress()}
-                />
-                :
-                <Button
-                    title="Favoritear"
-                    color="#bce40c"
-                    onPress={() => onBtnPress()}
-                />
-            }
-
+            <TouchableOpacity
+                style={[styles.btn, isPressed ? styles.btnActive : styles.btnInactive]}
+                onPress={() => onBtnPress()}
+            >
+                <Text style={[styles.btnText, isPressed ? styles.btnTextActive : styles.btnTextInactive]}>{isPressed ? 'Des-fav' : 'Favorito'}</Text>
+            </TouchableOpacity>
         </View>
     );
 }
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
+        alignItems: 'flex-start',
         justifyContent: 'center',
     },
+    btn: {
+        paddingVertical: 8,
+        paddingHorizontal: 12,
+        borderRadius: 8,
+        borderWidth: 1,
+    },
+    btnText: { fontWeight: '600' },
+    btnActive: { backgroundColor: '#2a2c2f', borderColor: '#828415' },
+    btnInactive: { backgroundColor: '#fffef0', borderColor: '#bce40c' },
+    btnTextActive: { color: '#d6d6b0' },
+    btnTextInactive: { color: '#182000' },
 });

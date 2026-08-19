@@ -1,8 +1,9 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Image } from 'react-native';
+import { StyleSheet, Text, View, Image, ScrollView } from 'react-native';
 import React, { useState, useEffect } from 'react';
 import { useRoute } from '@react-navigation/native';
 import { movieDetail } from '../services/api';
+import { COLORS, SIZES, FONTS } from '../styles';
 
 export default function MovieDetail() {
     const route = useRoute();
@@ -31,35 +32,29 @@ export default function MovieDetail() {
 
 
     return (
-        <View style={styles.container}>
-            
-
-            {loading ? <Text>cargando...</Text> :
-
-                <View>
-
-                    <Text>{movie?.Title}</Text>
-
-                    <Image source={{ uri: movie.Poster }} style={styles.imagen}/>
-
-                    <Text>{"Actores: "+movie?.Actors}</Text>
-                    <Text>{"Premios: " + movie?.Awards}</Text>
-                    <Text>{"Pais: "+movie?.Country}</Text>
-
+        <ScrollView style={styles.container} contentContainerStyle={styles.content}>
+            {loading ? (
+                <Text style={styles.loading}>Cargando...</Text>
+            ) : (
+                <View style={styles.card}>
+                    <Text style={styles.title}>{movie?.Title}</Text>
+                    <Image source={{ uri: movie.Poster }} style={styles.imagen} />
+                    <Text style={styles.text}>{"Actores: " + movie?.Actors}</Text>
+                    <Text style={styles.text}>{"Premios: " + movie?.Awards}</Text>
+                    <Text style={styles.text}>{"Pais: " + movie?.Country}</Text>
                 </View>
-
-            }
+            )}
             <StatusBar style="auto" />
-        </View>
+        </ScrollView>
     );
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#fff',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    imagen: { width: 300, height: 400 },
+    container: { flex: 1, backgroundColor: COLORS.bg },
+    content: { padding: SIZES.pagePadding },
+    card: { backgroundColor: COLORS.bgElevated, padding: 16, borderRadius: 10, borderColor: COLORS.border, borderWidth: 1 },
+    title: { color: COLORS.text, marginBottom: 12, ...FONTS.title },
+    imagen: { width: '100%', height: SIZES.screenHeight * 0.5, borderRadius: 8, backgroundColor: COLORS.surface },
+    text: { color: COLORS.text, marginTop: 8 },
+    loading: { color: COLORS.textMuted },
 });

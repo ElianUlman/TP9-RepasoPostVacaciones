@@ -4,6 +4,7 @@ import { simpleMovie } from '../services/api.js'
 import React, { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import FavoriteBtn from '../components/FavoriteBtn.jsx';
+import { COLORS, SIZES, FONTS } from '../styles';
 
 
 export default function Home() {
@@ -38,6 +39,8 @@ export default function Home() {
     return (
         <View style={styles.container}>
             <TextInput
+                placeholder="Buscar película..."
+                placeholderTextColor={COLORS.textMuted}
                 style={styles.input}
                 onChangeText={setSearchQuery}
                 value={searchQuery}
@@ -48,33 +51,26 @@ export default function Home() {
                 keyExtractor={(item) => item.imdbID.toString()}
                 numColumns={1}
                 contentContainerStyle={styles.list}
-                /**ListHeaderComponent={<BarraEstados userList={images} />} */
                 renderItem={({ item }) => (
                     <Pressable
-                        onPress={() => { navigation.navigate('MovieDetail', { movieId: item.imdbID}) } }
+                        onPress={() => { navigation.navigate('MovieDetail', { movieId: item.imdbID }) }}
                     >
                         <View style={styles.card}>
-
-                            {loading ?
-                                <Text>loading</Text>
-                                :
-
-                                <View>
+                            {loading ? (
+                                <Text style={styles.loading}>Cargando...</Text>
+                            ) : (
+                                <View style={styles.cardInner}>
                                     <Image
                                         source={{ uri: item.Poster }}
                                         style={styles.imagen}
                                     />
-                                    
-                                    <Text>{item.Title}</Text>
-                                    <FavoriteBtn movie={item} ></FavoriteBtn>
+                                    <View style={styles.meta}>
+                                        <Text style={styles.title} numberOfLines={2}>{item.Title}</Text>
+                                        <FavoriteBtn movie={item} />
+                                    </View>
                                 </View>
-
-                            }
-
-
+                            )}
                         </View>
-
-
                     </Pressable>
                 )}
             />
@@ -83,10 +79,14 @@ export default function Home() {
 }
 
 const styles = StyleSheet.create({
-    container: { flex: 1, backgroundColor: '#FFFFFF' },
-    center: { flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#000' },
-    list: { paddingBottom: 12 },
-    card: { marginBottom: 12 },
-    imagen: { width: 150, height: 200 },
-    input: { marginTop: "10%" },
+    container: { flex: 1, backgroundColor: COLORS.bg, padding: SIZES.pagePadding },
+    center: { flex: 1, justifyContent: 'center', alignItems: 'center' },
+    list: { paddingBottom: 24 },
+    card: { marginBottom: SIZES.cardMargin, backgroundColor: COLORS.bgElevated, borderRadius: 10, overflow: 'hidden', borderColor: COLORS.border, borderWidth: 1 },
+    cardInner: { flexDirection: 'row', padding: 12, alignItems: 'center' },
+    imagen: { width: Math.min(120, SIZES.screenWidth * 0.32), height: Math.min(160, SIZES.screenHeight * 0.25), borderRadius: 6, backgroundColor: COLORS.surface },
+    meta: { flex: 1, marginLeft: 12, justifyContent: 'space-between' },
+    title: { color: COLORS.text, ...FONTS.title },
+    input: { marginTop: 12, padding: 10, borderRadius: 8, backgroundColor: COLORS.surface, color: COLORS.text, borderColor: COLORS.border, borderWidth: 1 },
+    loading: { color: COLORS.textMuted },
 });
