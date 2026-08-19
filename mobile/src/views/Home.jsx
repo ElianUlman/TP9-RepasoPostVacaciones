@@ -64,8 +64,9 @@ export default function Home() {
                                         source={{ uri: item.Poster }}
                                         style={styles.imagen}
                                     />
+                                    
                                     <Text>{item.Title}</Text>
-                                    <FavoriteBtn id={item.imdbID}></FavoriteBtn>
+                                    <FavoriteBtn movie={item} ></FavoriteBtn>
                                 </View>
 
                             }

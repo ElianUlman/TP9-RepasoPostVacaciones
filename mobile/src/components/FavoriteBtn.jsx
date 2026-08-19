@@ -5,7 +5,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useState, useEffect } from 'react';
 
 
-export default function FavoriteBtn({ id }) {
+export default function FavoriteBtn({ movie }) {
 
     const [favoritos, setFavoritos] = useState([])
     const [isPressed, setIsPressed] = useState(false)
@@ -18,7 +18,7 @@ export default function FavoriteBtn({ id }) {
         }
     };
 
-    
+
     const getData = async () => {
         try {
             const value = await AsyncStorage.getItem('@favoritos');
@@ -37,21 +37,27 @@ export default function FavoriteBtn({ id }) {
 
         const onLoad = async () => {
             const values = await getData();
+            const existsInArray = values.some(item => item.imdbID == movie.imdbID)
+            if (existsInArray) {
+                setIsPressed(true)
+            }
             setFavoritos(values);
         }
         onLoad();
 
     }, [])
 
+    
 
-    const onBtnPress = () => {
+    const onBtnPress = async () => {
+        const asyncFavs = await getData();
         if (!isPressed) {
-            const updatedFavs = [...favoritos, id];
+            const updatedFavs = [...asyncFavs, movie];
             setFavoritos(updatedFavs)
             setIsPressed(true)
             saveData(updatedFavs)
         } else {
-            const updatedFavs = favoritos.filter(item => item !== id);
+            const updatedFavs = asyncFavs.filter(item => item.imdbID !== movie.imdbID);
             setFavoritos(updatedFavs);
             setIsPressed(false)
             saveData(updatedFavs)

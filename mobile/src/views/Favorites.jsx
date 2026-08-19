@@ -1,6 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, FlatList } from 'react-native';
-import React, { useState, useEffect } from 'react';
+import { StyleSheet, Text, View, FlatList, Image } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
+import React, { useState, useCallback } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
@@ -24,7 +25,7 @@ export default function Favorites() {
     }
   };
 
-  useEffect(() => {
+  useFocusEffect(useCallback(() => {
     const cargar = async () => {
       setLoading(true)
       try {
@@ -43,7 +44,7 @@ export default function Favorites() {
       }
     }
     cargar()
-  }, [])
+  }, []))
   return (
     <View style={styles.container}>
       {loading ? (
@@ -53,7 +54,15 @@ export default function Favorites() {
         <FlatList
           data={favoritos}
           keyExtractor={(item, index) => index.toString()}
-          renderItem={({ item }) => <Text>{item}</Text>}
+          renderItem={({ item }) =>
+            <View>
+              <Image source={{ uri: item.Poster }} style={styles.imagen}/>
+              
+
+              <Text>{item.Title}</Text>
+
+            </View>
+          }
         />
       )}
     </View>
@@ -66,5 +75,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
+    
   },
+  imagen: { width: 150, height: 200 },
 });
