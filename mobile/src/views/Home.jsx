@@ -3,7 +3,7 @@ import { StyleSheet, View, FlatList, ActivityIndicator, Pressable, Image, TextIn
 import { simpleMovie } from '../services/api.js'
 import React, { useState, useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
-
+import FavoriteBtn from '../components/FavoriteBtn.jsx';
 
 
 export default function Home() {
@@ -65,10 +65,15 @@ export default function Home() {
                                         style={styles.imagen}
                                     />
                                     <Text>{item.Title}</Text>
+                                    <FavoriteBtn id={item.imdbID}></FavoriteBtn>
                                 </View>
 
                             }
+
+
                         </View>
+
+
                     </Pressable>
                 )}
             />

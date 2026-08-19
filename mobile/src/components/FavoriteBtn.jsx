@@ -5,53 +5,56 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import React, { useState, useEffect } from 'react';
 
 
-export default function FavoriteBtn({id}) {
+export default function FavoriteBtn({ id }) {
 
     const [favoritos, setFavoritos] = useState([])
     const [isPressed, setIsPressed] = useState(false)
 
-    const saveData = async () => {
+    const saveData = async (dataToSave) => {
         try {
-            await AsyncStorage.setItem('@favoritos', favoritos);
+            await AsyncStorage.setItem('@favoritos', JSON.stringify(dataToSave));
         } catch (e) {
             console.log(e)
         }
     };
 
-    // Leer datos
+    
     const getData = async () => {
         try {
             const value = await AsyncStorage.getItem('@favoritos');
-            if(value == null){
+            if (value == null) {
                 return []
             }
-            return value
+            return JSON.parse(value)
 
         } catch (e) {
             console.log(e)
+            return []
         }
     };
 
-    useEffect(()=>{
+    useEffect(() => {
 
-        const onLoad = () =>{
-            const values = getData();
-            setFavoritos(values)
+        const onLoad = async () => {
+            const values = await getData();
+            setFavoritos(values);
         }
-
         onLoad();
 
     }, [])
 
+
     const onBtnPress = () => {
-        if(!isPressed){
-            favoritos.push(id)
+        if (!isPressed) {
+            const updatedFavs = [...favoritos, id];
+            setFavoritos(updatedFavs)
             setIsPressed(true)
-            saveData()
-        }else{
-            favoritos = favoritos.filter(item => item !== id);
+            saveData(updatedFavs)
+        } else {
+            const updatedFavs = favoritos.filter(item => item !== id);
+            setFavoritos(updatedFavs);
             setIsPressed(false)
-            saveData()
+            saveData(updatedFavs)
         }
 
     }
@@ -59,11 +62,20 @@ export default function FavoriteBtn({id}) {
 
     return (
         <View style={styles.container}>
-            <Button
-                title="Favoritiear"
-                color="#841584"
-                onPress={() => onBtnPress()}
-            />
+            {isPressed ?
+                <Button
+                    title="Des-favoritear"
+                    color="#828415"
+                    onPress={() => onBtnPress()}
+                />
+                :
+                <Button
+                    title="Favoritear"
+                    color="#bce40c"
+                    onPress={() => onBtnPress()}
+                />
+            }
+
         </View>
     );
 }
