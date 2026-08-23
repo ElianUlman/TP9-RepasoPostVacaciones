@@ -1,9 +1,10 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, FlatList, Image } from 'react-native';
+import { StyleSheet, Text, View, FlatList, Image, TouchableOpacity } from 'react-native';
 import { useFocusEffect } from '@react-navigation/native';
 import React, { useState, useCallback } from 'react';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { COLORS, SIZES, FONTS } from '../styles';
+import { Ionicons } from '@expo/vector-icons';
 
 
 export default function Favorites() {
@@ -23,6 +24,21 @@ export default function Favorites() {
     } catch (e) {
       console.log(e)
       return []
+    }
+  };
+
+  const deleteFavorite = async (movieId) => {
+    try {
+      const updatedFavs = favoritos.filter(item => item.imdbID !== movieId);
+
+      await AsyncStorage.setItem(
+        '@favoritos',
+        JSON.stringify(updatedFavs)
+      );
+
+      setFavoritos(updatedFavs);
+    } catch (e) {
+      console.log('No se pudo eliminar el favorito:', e);
     }
   };
 
@@ -53,8 +69,28 @@ export default function Favorites() {
           contentContainerStyle={styles.list}
           renderItem={({ item }) => (
             <View style={styles.card}>
-              <Image source={{ uri: item.Poster }} style={styles.imagen} />
-              <Text style={styles.title}>{item.Title}</Text>
+              <Image
+                source={{ uri: item.Poster }}
+                style={styles.imagen}
+              />
+
+              <View style={styles.cardBottom}>
+                <Text style={styles.title} numberOfLines={2}>
+                  {item.Title}
+                </Text>
+
+                <TouchableOpacity
+                  onPress={() => deleteFavorite(item.imdbID)}
+                  activeOpacity={0.6}
+                  style={styles.deleteButton}
+                >
+                  <Ionicons
+                    name="trash-outline"
+                    size={22}
+                    color={COLORS.textMuted}
+                  />
+                </TouchableOpacity>
+              </View>
             </View>
           )}
         />
@@ -76,4 +112,21 @@ const styles = StyleSheet.create({
   imagen: { width: Math.min(160, SIZES.screenWidth * 0.6), height: Math.min(220, SIZES.screenHeight * 0.32), borderRadius: 6, backgroundColor: COLORS.surface },
   title: { color: COLORS.text, marginTop: 8, ...FONTS.title },
   loading: { color: COLORS.textMuted },
+  cardBottom: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    marginTop: 8,
+  },
+
+  title: {
+    color: COLORS.text,
+    ...FONTS.title,
+    flex: 1,
+    marginRight: 12,
+  },
+
+  deleteButton: {
+    padding: 6,
+  },
 });

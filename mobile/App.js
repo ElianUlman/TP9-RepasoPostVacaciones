@@ -3,6 +3,7 @@ import { StyleSheet, Text, View } from 'react-native';
 import { COLORS } from './src/styles';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
+import { Ionicons } from '@expo/vector-icons';
 
 import { NavigationContainer } from '@react-navigation/native';
 
@@ -22,13 +23,35 @@ function MainTabs() {
       screenOptions={{
         headerStyle: { backgroundColor: COLORS.bgElevated },
         headerTintColor: COLORS.text,
-        tabBarStyle: { backgroundColor: COLORS.bgElevated, borderTopColor: COLORS.border },
+        tabBarStyle: {
+          backgroundColor: COLORS.bgElevated,
+          borderTopColor: COLORS.border,
+        },
         tabBarActiveTintColor: COLORS.accent,
         tabBarInactiveTintColor: COLORS.textMuted,
       }}
     >
-      <BottomTab.Screen name="Home" component={Home} options={{ title: 'Inicio' }} />
-      <BottomTab.Screen name="favoritos" component={Favorites} options={{ title: 'Favoritos' }} />
+      <BottomTab.Screen
+        name="Home"
+        component={Home}
+        options={{
+          title: 'Inicio',
+          tabBarIcon: ({ color, size, focused }) => (
+            <Ionicons name="home" size={size} color={color} name={focused ? 'home' : 'home-outline'} />
+          ),
+        }}
+      />
+
+      <BottomTab.Screen
+        name="favoritos"
+        component={Favorites}
+        options={{
+          title: 'Favoritos',
+          tabBarIcon: ({ color, size, focused }) => (
+            <Ionicons name="star" size={size} color={color} name={focused ? 'star' : 'star-outline'} />
+          ),
+        }}
+      />
     </BottomTab.Navigator>
   );
 }

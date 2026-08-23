@@ -1,6 +1,7 @@
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Ionicons } from '@expo/vector-icons';
 
 import React, { useState, useEffect } from 'react';
 
@@ -51,7 +52,7 @@ export default function FavoriteBtn({ movie }) {
 
     }, [])
 
-    
+
 
     const onBtnPress = async () => {
         const asyncFavs = await getData();
@@ -73,10 +74,14 @@ export default function FavoriteBtn({ movie }) {
     return (
         <View style={styles.container}>
             <TouchableOpacity
-                style={[styles.btn, isPressed ? styles.btnActive : styles.btnInactive]}
-                onPress={() => onBtnPress()}
+                onPress={onBtnPress}
+                activeOpacity={0.6}
             >
-                <Text style={[styles.btnText, isPressed ? styles.btnTextActive : styles.btnTextInactive]}>{isPressed ? 'Des-fav' : 'Favorito'}</Text>
+                <Ionicons
+                    name={isPressed ? 'star' : 'star-outline'}
+                    size={24}
+                    color={isPressed ? '#FFD700' : '#B8B8B8'}
+                />
             </TouchableOpacity>
         </View>
     );
@@ -87,15 +92,4 @@ const styles = StyleSheet.create({
         alignItems: 'flex-start',
         justifyContent: 'center',
     },
-    btn: {
-        paddingVertical: 8,
-        paddingHorizontal: 12,
-        borderRadius: 8,
-        borderWidth: 1,
-    },
-    btnText: { fontWeight: '600' },
-    btnActive: { backgroundColor: '#2a2c2f', borderColor: '#828415' },
-    btnInactive: { backgroundColor: '#fffef0', borderColor: '#bce40c' },
-    btnTextActive: { color: '#d6d6b0' },
-    btnTextInactive: { color: '#182000' },
 });
